@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./assets/cl6678d50er243.png" alt="Company Logo" width="200"/>
+</p>
+
 # 🔍 Audit Tools
 
 A collection of tools and scripts designed to assist with auditing, analysis, and review processes.  
