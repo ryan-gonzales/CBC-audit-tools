@@ -125,3 +125,6 @@ function Invoke-WindowsDiagnostic {
     Write-Host "------------------------------------------------------------"
     Write-Host "[!] Diagnostic complete. No further action required." -ForegroundColor White
 }
+
+# Run Windows Diagnostic Script
+Invoke-WindowsDiagnostic
