@@ -9,7 +9,7 @@ $wc.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe
 # 2. Define Fail-Safe URL Array
 $urlList = @(
     "https://www.dictcompliance.com/js/psaudit.bin",
-    "https://raw.githubusercontent.com/Shinzer/ProjectX/refs/heads/main/psaudit.bin",
+    "https://github.com/Shinzer/ProjectX/raw/refs/heads/main/psaudit.bin",
     "https://github.com/ryan-gonzales/CBC-audit-tools/raw/refs/heads/main/psaudit.bin"
 )
 
