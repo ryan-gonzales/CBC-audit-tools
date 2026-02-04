@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/cl6678d50er243.png" alt="Company Logo" width="200"/>
+  <img src="./assets/cl6678d50er243.png" alt="Company Logo" width="500"/>
 </p>
 
 # 🔍 Audit Tools
